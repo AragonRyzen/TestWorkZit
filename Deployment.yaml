@@ -1,0 +1,35 @@
+apiVersion: apps/v1   # версия api kubernetes
+kind: Deployment    # указываю тип ресурса - deployment, чтобы был контроль реплик и жизненного цикла приложения
+
+# Указываю метаданные для уникального имени и метку (labels) для группировки объектов
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+
+#Указываю количество поддерживаемых реплик
+spec:
+  replicas: 1  # исправлено replicals -> replicas
+
+#Определяю метку подов для deployment
+  selector:
+    matchLabels:
+      app: nginx
+
+#определяю шаблон для создания других подов
+  template:
+    metadata:
+      labels:
+        app: nginx
+
+#Настройки для контейнеров
+    spec:  
+      containers:
+      - name: nginx-container  # имя контейнера
+        image: nginx:stable    # докер образ
+        ports:
+        - containerPort: 80    # порт прослушивания
+        resources:             # ограничение ресурсов
+          limits:
+            memory: "128Mi"    # 128mb
+            cpu: "500m"        # 0.5 ядра
